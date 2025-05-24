@@ -1,0 +1,295 @@
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الجهات المانحة - المنظمات غير الربحية</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <script type="importmap">
+    {
+        "imports": {
+            "./js/donor-manager.js": "./js/donor-manager.js",
+            "./js/project-manager.js": "./js/project-manager.js",
+            "./js/grant-manager.js": "./js/grant-manager.js",
+            "./js/dashboard-controller.js": "./js/dashboard-controller.js",
+            "./js/reports-controller.js": "./js/reports-controller.js",
+            "./js/navigation-controller.js": "./js/navigation-controller.js"
+        }
+    }
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-heart-fill me-2"></i>
+                إدارة الجهات المانحة
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#dashboard" onclick="showSection('dashboard')">
+                            <i class="bi bi-speedometer2"></i> لوحة التحكم
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#donors" onclick="showSection('donors')">
+                            <i class="bi bi-people-fill"></i> الجهات المانحة
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#projects" onclick="showSection('projects')">
+                            <i class="bi bi-folder-fill"></i> المشاريع
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#grants" onclick="showSection('grants')">
+                            <i class="bi bi-cash-stack"></i> المنح
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#reports" onclick="showSection('reports')">
+                            <i class="bi bi-graph-up"></i> التقارير
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 id="totalDonors">0</h4>
+                                    <p>إجمالي الجهات المانحة</p>
+                                </div>
+                                <i class="bi bi-people-fill fs-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 id="totalProjects">0</h4>
+                                    <p>المشاريع النشطة</p>
+                                </div>
+                                <i class="bi bi-folder-fill fs-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 id="totalGrants">0</h4>
+                                    <p>إجمالي المنح</p>
+                                </div>
+                                <i class="bi bi-cash-stack fs-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 id="totalAmount">$0</h4>
+                                    <p>إجمالي المبالغ</p>
+                                </div>
+                                <i class="bi bi-currency-dollar fs-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>المشاريع الحديثة</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="recentProjects">
+                                <p class="text-muted">لا توجد مشاريع حتى الآن</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>الجهات المانحة الأكثر نشاطاً</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="topDonors">
+                                <p class="text-muted">لا توجد بيانات</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Donors Section -->
+        <section id="donors" class="content-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>إدارة الجهات المانحة</h2>
+                <button class="btn btn-primary" onclick="showDonorModal()">
+                    <i class="bi bi-plus"></i> إضافة جهة مانحة
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>الاسم</th>
+                                    <th>النوع</th>
+                                    <th>البريد الإلكتروني</th>
+                                    <th>الهاتف</th>
+                                    <th>البلد</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="donorsTable">
+                                <!-- Donors will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="content-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>إدارة المشاريع</h2>
+                <button class="btn btn-primary" onclick="showProjectModal()">
+                    <i class="bi bi-plus"></i> إضافة مشروع
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>اسم المشروع</th>
+                                    <th>الوصف</th>
+                                    <th>تاريخ البدء</th>
+                                    <th>تاريخ الانتهاء</th>
+                                    <th>الحالة</th>
+                                    <th>الميزانية</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="projectsTable">
+                                <!-- Projects will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grants Section -->
+        <section id="grants" class="content-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>إدارة المنح</h2>
+                <button class="btn btn-primary" onclick="showGrantModal()">
+                    <i class="bi bi-plus"></i> إضافة منحة
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>عنوان المنحة</th>
+                                    <th>الجهة المانحة</th>
+                                    <th>المشروع</th>
+                                    <th>المبلغ</th>
+                                    <th>تاريخ التقديم</th>
+                                    <th>الحالة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="grantsTable">
+                                <!-- Grants will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="content-section" style="display: none;">
+            <h2 class="mb-4">التقارير والإحصائيات</h2>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>توزيع المنح حسب الحالة</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="grantsStatusChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>المبالغ حسب الجهة المانحة</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="donorAmountsChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5>تقرير مفصل</h5>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-success" onclick="generateReport()">
+                        <i class="bi bi-file-earmark-excel"></i> تصدير التقرير
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modals -->
+    <div id="modalsContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
